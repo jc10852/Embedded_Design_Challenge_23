@@ -64,6 +64,15 @@ void indicateSuccess() {
 
   CircuitPlayground.clearPixels(); // Clear the LEDs again
 }
+void indicateFailure()
+{
+  CircuitPlayground.clearPixels(); // Clear the LEDs
+  for(int i = 0; i < 10; i++) {
+    CircuitPlayground.setPixelColor(i, 255, 0, 0); //Set Red LED to indicate the error
+  }
+  CircuitPlayground.playTone(1000,1000); // Alarm for error
+  CircuitPlayground.clearPixels(); // Clear the LEDs again
+}
 
 // Main loop function
 void loop() {
@@ -79,6 +88,7 @@ void loop() {
       indicateSuccess();
     } else {
       Serial.println("Failure."); // If the sequences don't match, print "Failure."
+      indicateFailure();
     }
   }
 }
