@@ -5,6 +5,7 @@
 const int MAX_SEQUENCE_LENGTH = 20;
 float recordedSequence[MAX_SEQUENCE_LENGTH][3]; // Array to store the motion sequence
 int sequenceLength = 0; // Keeps track of the sequence length
+const float alpha = 0.5; //alpha vlaue for low pass filter
 
 // Setup function runs once at the beginning
 void setup() {
@@ -73,6 +74,27 @@ void indicateFailure()
   CircuitPlayground.playTone(1000,1000); // Alarm for error
   CircuitPlayground.clearPixels(); // Clear the LEDs again
 }
+void indicateRecording()
+{
+  CircuitPlayground.clearPixels(); // Clear the LEDs
+  for(int i = 0; i < 10; i++) {
+    CircuitPlayground.setPixelColor(i, 255, 0, 0); //Set Red LED to indicate the error
+  }
+  CircuitPlayground.playTone(1000,1000); // Alarm for error
+  CircuitPlayground.clearPixels(); // Clear the LEDs again
+}
+/*
+  @param data Input signal to be processed
+  @param index Index of input signal
+  @param data Dimention of input signal
+
+  A software implementation of a simple low pass filter
+*/
+void lowPass(float data, int index, int dim)
+{
+  recordedSequence[dim][index] = alpha * data + (1-alpha) * recordedSequence[dim][index-1];
+  recordedSequence[dim][index-1] = recordedSequence[dim][index];
+}
 
 // Main loop function
 void loop() {
@@ -92,4 +114,3 @@ void loop() {
     }
   }
 }
-
